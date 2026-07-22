@@ -1,19 +1,32 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request) {
-  const { message } = await request.json();
+  try {
+    const body = await request.json();
 
-  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+    const genAI = new GoogleGenerativeAI(
+      process.env.GOOGLE_API_KEY
+    );
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash"
-  });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash"
+    });
 
-  const result = await model.generateContent(message);
+    const result = await model.generateContent(body.message);
 
-  const response = result.response.text();
+    const response = result.response.text();
 
-  return Response.json({
-    response
-  });
+    return Response.json({
+      response: response
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    return Response.json({
+      response: "Erreur : " + error.message
+    }, {
+      status: 500
+    });
+  }
 }
