@@ -1,4 +1,4 @@
-export default function Home() {
+efault function Home() {
   return (
     <main style={{
       minHeight: "100vh",
